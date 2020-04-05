@@ -27,10 +27,15 @@ public class ConsoleProgress implements Runnable {
             }
         }
 
-    public static void main(String[] args) throws InterruptedException{
+    public static void main(String[] args) {
         Thread progress = new Thread(new ConsoleProgress());
         progress.start();
-        Thread.sleep(5000);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            progress.interrupt();
+        }
         progress.interrupt();
     }
 }
