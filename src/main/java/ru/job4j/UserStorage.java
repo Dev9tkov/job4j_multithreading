@@ -2,8 +2,8 @@ package ru.job4j;
 
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Ilya Devyatkov
@@ -11,41 +11,29 @@ import java.util.List;
  */
 @ThreadSafe
 public class UserStorage {
+    private Map<Integer, User> userMap = new HashMap<>();
 
-    private List<User> userList = new ArrayList<>();
-
-    public synchronized boolean add (User user) {
-        return userList.add(user);
+    public synchronized User add (User user) {
+        return userMap.put(user.getId(), user);
     }
 
-    public synchronized boolean update (int id, User user) {
-        boolean result = false;
-        for(User val : userList) {
-            if (val.getId() == id) {
-                val.setId(user.getId());
-                val.setAmount(user.getAmount());
-                result = true;
-            }
-        }
-        return result;
+    public synchronized User update (User user) {
+        return userMap.put(user.getId(), user);
+
     }
 
-    public synchronized boolean delete(User user) {
-        return userList.removeIf(val -> val.equals(user));
+    public synchronized User delete(User user) {
+        return userMap.remove(user.getId());
     }
 
-    public void transfer(int fromId, int toId, int amount) {
-        User from = userList.stream()
-                .filter(val -> val.getId() == fromId)
-                .findFirst()
-                .get();
-        User to = userList.stream()
-                .filter(val -> val.getId() == toId)
-                .findFirst()
-                .get();
-        synchronized (this) {
-            from.setAmount(from.getAmount() - amount);
-            to.setAmount(to.getAmount() + amount);
-        }
+    public Map<Integer, User> getUserMap() {
+        return userMap;
+    }
+
+    public synchronized void transfer(int fromId, int toId, int amount) {
+        User from = userMap.get(fromId);
+        User to = userMap.get(toId);
+        from.setAmount(from.getAmount() - amount);
+        to.setAmount(to.getAmount() + amount);
     }
 }
