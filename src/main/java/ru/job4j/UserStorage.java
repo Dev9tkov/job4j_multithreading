@@ -1,5 +1,6 @@
 package ru.job4j;
 
+import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  */
 @ThreadSafe
 public class UserStorage {
+    @GuardedBy("this")
     private Map<Integer, User> userMap = new HashMap<>();
 
     public synchronized User add (User user) {
@@ -26,7 +28,7 @@ public class UserStorage {
         return userMap.remove(user.getId());
     }
 
-    public Map<Integer, User> getUserMap() {
+    public synchronized Map<Integer, User> getUserMap() {
         return userMap;
     }
 
