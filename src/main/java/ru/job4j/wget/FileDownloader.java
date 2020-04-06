@@ -9,15 +9,17 @@ import java.net.URL;
  * @author Ilya Devyatkov
  * @since 30.03.2020
  */
-public class FileDownloader {
+public class FileDownloader implements Runnable {
+    private Args keys;
 
-    public static void main(String[] args) {
-        Args keys = new Args();
-        keys.parseValues(args);
+    public FileDownloader(Args keys) {
+        this.keys = keys;
+    }
+
+    private void download() {
         String file = keys.getPath();
         Integer speed = keys.getSpeed();
         String output = keys.getOutput();
-
         try (BufferedInputStream in = new BufferedInputStream(new URL(file).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(output)) {
 
@@ -37,5 +39,17 @@ public class FileDownloader {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+        download();
+    }
+
+    public static void main(String[] args) {
+        Args keys = new Args();
+        keys.parseValues(args);
+        Thread thread = new Thread(new FileDownloader(keys));
+        thread.start();
     }
 }
