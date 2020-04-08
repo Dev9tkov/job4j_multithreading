@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
+ * Bounded blocking queue
  * @author Ilya Devyatkov
  * @since 06.04.2020
  */
@@ -15,11 +16,38 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
 
+    int capacity = 8;
+
+    int size = 0;
+
     public synchronized void offer(T value) {
+        while (size == capacity) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         queue.offer(value);
+        size++;
+        notifyAll();
     }
 
     public synchronized T poll() {
-        return queue.poll();
+        while (size == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        T rsl = queue.poll();
+        size--;
+        notifyAll();
+        return rsl;
+    }
+
+    public int getSize() {
+        return size;
     }
 }
