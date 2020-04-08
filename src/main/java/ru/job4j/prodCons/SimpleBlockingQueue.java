@@ -47,7 +47,7 @@ public class SimpleBlockingQueue<T> {
         return rsl;
     }
 
-    public int getSize() {
+    public synchronized int getSize() {
         return size;
     }
 }
