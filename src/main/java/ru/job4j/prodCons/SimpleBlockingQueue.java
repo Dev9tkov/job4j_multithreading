@@ -20,26 +20,18 @@ public class SimpleBlockingQueue<T> {
 
     int size = 0;
 
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (size == capacity) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            wait();
         }
         queue.offer(value);
         size++;
         notifyAll();
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (size == 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            wait();
         }
         T rsl = queue.poll();
         size--;
@@ -49,5 +41,9 @@ public class SimpleBlockingQueue<T> {
 
     public synchronized int getSize() {
         return size;
+    }
+
+    public synchronized boolean isEmpty() {
+        return queue.isEmpty();
     }
 }

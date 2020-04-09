@@ -14,7 +14,11 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         for(int i = 0; i < simpleQueue.getSize(); i++) {
-            simpleQueue.offer(1);
+            try {
+                simpleQueue.offer(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

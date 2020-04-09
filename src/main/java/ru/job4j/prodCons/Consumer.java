@@ -13,7 +13,10 @@ public class Consumer implements Runnable{
 
     @Override
     public void run() {
-        simpleQueue.poll();
-        System.out.println("cons");
+        try {
+            simpleQueue.poll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
