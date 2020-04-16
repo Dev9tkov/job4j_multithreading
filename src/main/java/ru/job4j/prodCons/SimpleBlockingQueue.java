@@ -14,7 +14,7 @@ import java.util.Queue;
 @ThreadSafe
 public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
-    private Queue<T> queue = new LinkedList<>();
+    private final Queue<T> queue = new LinkedList<>();
 
     private volatile int capacity = 8;
 
@@ -25,6 +25,7 @@ public class SimpleBlockingQueue<T> {
             wait();
         }
         queue.offer(value);
+        System.out.println(String.format("Пушнули %s", value));
         size++;
         notifyAll();
     }
@@ -35,6 +36,7 @@ public class SimpleBlockingQueue<T> {
         }
         T rsl = queue.poll();
         size--;
+        System.out.println(String.format("Дернули %s", rsl));
         notifyAll();
         return rsl;
     }
