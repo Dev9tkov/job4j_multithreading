@@ -13,7 +13,7 @@ import java.util.Map;
 @ThreadSafe
 public class UserStorage {
     @GuardedBy("this")
-    private Map<Integer, User> userMap = new HashMap<>();
+    private final Map<Integer, User> userMap = new HashMap<>();
 
     public synchronized User add (User user) {
         return userMap.put(user.getId(), user);
@@ -26,10 +26,6 @@ public class UserStorage {
 
     public synchronized User delete(User user) {
         return userMap.remove(user.getId());
-    }
-
-    public synchronized Map<Integer, User> getUserMap() {
-        return userMap;
     }
 
     public synchronized void transfer(int fromId, int toId, int amount) {
