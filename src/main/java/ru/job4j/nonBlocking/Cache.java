@@ -1,5 +1,7 @@
 package ru.job4j.nonBlocking;
 
+import net.jcip.annotations.GuardedBy;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -7,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 10.04.2020
  */
 public class Cache {
-
-    private Base base;
 
     private ConcurrentHashMap<Integer, Base> storage = new ConcurrentHashMap<>();
 
