@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
  * @since 11.04.2020
  */
 public class EmailNotification {
-    private User user;
-    private ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+    private final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public void emailTo(User user) {
         pool.submit(new Runnable() {
