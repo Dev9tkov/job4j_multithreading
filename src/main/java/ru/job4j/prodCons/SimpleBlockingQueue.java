@@ -16,9 +16,9 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
 
-    private volatile int capacity = 8;
+    private int capacity = 8;
 
-    private volatile int size = 0;
+    private int size = 0;
 
     public synchronized void offer(T value) throws InterruptedException {
         while (size == capacity) {
