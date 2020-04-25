@@ -35,7 +35,9 @@ public class ThreadPool {
     }
 
     public void shutdown() {
-        threads.forEach(Thread::interrupt);
+        synchronized (this) {
+            threads.forEach(Thread::interrupt);
+        }
     }
 
     private final class JobWorker extends Thread {
